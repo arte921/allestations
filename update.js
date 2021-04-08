@@ -1,16 +1,9 @@
-const writeJSON = require("./functies/writeJSON.js");
-const haalDataOp = require('./functies/haalDataOp.js');
+const {
+    updateMultiplanner
+} = require("multiplanner");
 
-(async () => {
-    const spoorkaart = await haalDataOp('/Spoorkaart-API/api/v1/spoorkaart/');
-    const stations = await haalDataOp('/reisinformatie-api/api/v2/stations');
+const readJSONSync = require('./functies/readJSONSync.js');
 
-    const geformatterdestations = stations.payload.filter((station) => station.land == "NL").map((station) => ({
-        code: station.code.toLowerCase(),
-        namen: [station.namen.kort, station.namen.middel, station.namen.lang, station.code.toLowerCase(), ...station.synoniemen],
-        coordinaat: [station.lng, station.lat]
-    }));
+const config = readJSONSync("config");
 
-    writeJSON(geformatterdestations, 'stations');
-    writeJSON(spoorkaart, 'spoorkaart');
-})();
+updateMultiplanner(config.ns_app_key_primary);

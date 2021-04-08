@@ -1,7 +1,10 @@
 const Discord = require("discord.js");
 
-const multiReis = require('./functies/multiReis.js');
-const formatteerReis = require('./functies/formatteerReis.js');
+const {
+    multiReis,
+    formatteerReis
+} = require("multiplanner");
+
 const readJSONSync = require('./functies/readJSONSync.js');
 
 const config = readJSONSync("config");
