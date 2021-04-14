@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.5.3",
     "chrono-node": "^2.2.5",
-    "string-similarity": "^4.0.4",
-    "multiplanner": "^2.0.9"
+    "discord.js": "^12.5.3",
+    "multiplanner": "^2.0.10",
+    "string-similarity": "^4.0.4"
   }
 }
