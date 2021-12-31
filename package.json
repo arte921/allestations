@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.5.3",
-    "multiplanner": "^2.0.10"
+    "multiplanner": "^3.1.1"
   }
 }

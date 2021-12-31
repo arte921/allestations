@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 
 const {
     multiReis,
+    planReis,
     formatteerReis
 } = require("multiplanner");
 
@@ -19,9 +20,9 @@ client.on("ready", async () => {
 client.on("message", async (msg) => {
     if (msg.author.bot || !msg.content.toLowerCase().startsWith(config.prefix.toLowerCase())) return;
     const route = msg.content.slice(config.prefix.length);
-    multiReis(route).then((reis) => {
-        const reisScriptNederlands = formatteerReis(reis);
-        msg.channel.send("```" + reisScriptNederlands + "```");
+    
+    planReis(multiReis(route)).then((reis) => {
+        msg.channel.send("```" + formatteerReis(reis) + "```");
     }).catch((_) => msg.react("😕"));
 });
 
