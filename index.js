@@ -6,15 +6,26 @@ const {
     formatteerReis
 } = require("multiplanner");
 
+const {
+    tekst
+} = require('bijbel-package');
+
 const readJSONSync = require('./functies/readJSONSync.js');
 
 const config = readJSONSync("config");
 
 const client = new Discord.Client();
 
+const updateGamestatus = async () => {
+    const tekstregel = await tekst("statenvertaling", config.tekstenfilter);
+    const tekstinhoud = tekstregel.match(/(?<=^[0-9A-Za-z ]+ )[^0-9]+$/)[0];
+    await client.user.setActivity(tekstinhoud);
+};
+
 client.on("ready", async () => {
     console.log(`Ingelogd als ${client.user.tag}`);
-    client.user.setActivity(config.gamestatus);
+    await updateGamestatus();
+    setInterval(updateGamestatus, 60000);
 });
 
 client.on("message", async (msg) => {
