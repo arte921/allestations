@@ -1,16 +1,12 @@
-const { Client, Events, GatewayIntentBits, Partials } = await import('discord.js');
-
+import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import multiplanner from "multiplanner";
+import tekst from 'bijbel-package';
 
 const {
     multiReis,
     planReis,
     formatteerReis  
 } = await multiplanner(process.env.NS_API);
-
-const {
-    tekst
-} = await import('bijbel-package');
 
 
 const client = new Client({
