@@ -15,8 +15,6 @@ const {
 
 const client = new Client({
     intents: [
-        // GatewayIntentBits.Guilds,
-        // GatewayIntentBits.GuildMessages,
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.DirectMessageReactions,
     ],
@@ -43,8 +41,8 @@ client.on("messageCreate", async msg => {
     const route = msg.content;
     planReis(multiReis(route)).then((reis) => {
         msg.channel.send("```" + formatteerReis(reis) + "```");
-    }).catch(console.error);
-    // }).catch((_) => msg.react("😕"));
+    // }).catch(console.error);
+    }).catch((_) => msg.react("😕"));
 });
 
 client.login(process.env.DISCORD_API);

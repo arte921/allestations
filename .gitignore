@@ -1,5 +1,3 @@
 /node_modules
-/opslag/*.json
 package-lock.json
-bot.js
-start.sh
+docker-compose.yaml

@@ -11,7 +11,7 @@
   "dependencies": {
     "bijbel-package": "1.1.2",
     "discord.js": "14.14.1",
-    "multiplanner": "3.3.1"
+    "multiplanner": "6.0.0"
   },
   "type": "module"
 }
