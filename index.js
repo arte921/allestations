@@ -1,23 +1,33 @@
-const Discord = require("discord.js");
+const { Client, Events, GatewayIntentBits, Partials } = await import('discord.js');
+
+import multiplanner from "multiplanner";
 
 const {
     multiReis,
     planReis,
-    formatteerReis
-} = require("multiplanner");
+    formatteerReis  
+} = await multiplanner(process.env.NS_API);
 
 const {
     tekst
-} = require('bijbel-package');
+} = await import('bijbel-package');
 
-const readJSONSync = require('./functies/readJSONSync.js');
 
-const config = readJSONSync("config");
-
-const client = new Discord.Client();
+const client = new Client({
+    intents: [
+        // GatewayIntentBits.Guilds,
+        // GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions,
+    ],
+    partials: [
+        Partials.Channel,
+        Partials.Message
+    ]
+});
 
 const updateGamestatus = async () => {
-    const tekstregel = await tekst("statenvertaling", config.tekstenfilter);
+    const tekstregel = await tekst("statenvertaling", ".*");
     const tekstinhoud = tekstregel.match(/(?<=^[0-9A-Za-z ]+ )[^0-9]+$/)[0];
     await client.user.setActivity(tekstinhoud);
 };
@@ -28,13 +38,13 @@ client.on("ready", async () => {
     setInterval(updateGamestatus, 60000);
 });
 
-client.on("message", async (msg) => {
-    if (msg.author.bot || !msg.content.toLowerCase().startsWith(config.prefix.toLowerCase())) return;
-    const route = msg.content.slice(config.prefix.length);
-    
+client.on("messageCreate", async msg => {
+    if (msg.author.bot) return;
+    const route = msg.content;
     planReis(multiReis(route)).then((reis) => {
         msg.channel.send("```" + formatteerReis(reis) + "```");
-    }).catch((_) => msg.react("😕"));
+    }).catch(console.error);
+    // }).catch((_) => msg.react("😕"));
 });
 
-client.login(config.dicord_bot_token);
+client.login(process.env.DISCORD_API);

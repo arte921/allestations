@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
+const fs = import("fs");
+const path = import("path");
 
-module.exports = (locatie) => JSON.parse(
+export default (locatie) => JSON.parse(
     fs.readFileSync(path.join("opslag", locatie + ".json"))
 );
