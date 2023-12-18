@@ -1,6 +1,5 @@
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import multiplanner from "multiplanner";
-import tekst from 'bijbel-package';
 
 const {
     multiReis,
@@ -20,23 +19,29 @@ const client = new Client({
     ]
 });
 
-const updateGamestatus = async () => {
-    const tekstregel = await tekst("statenvertaling", ".*");
-    const tekstinhoud = tekstregel.match(/(?<=^[0-9A-Za-z ]+ )[^0-9]+$/)[0];
-    await client.user.setActivity(tekstinhoud);
-};
-
 client.on("ready", async () => {
     console.log(`Ingelogd als ${client.user.tag}`);
-    await updateGamestatus();
-    setInterval(updateGamestatus, 60000);
 });
 
 client.on("messageCreate", async msg => {
     if (msg.author.bot) return;
     const route = msg.content;
-    planReis(multiReis(route)).then((reis) => {
-        msg.channel.send("```" + formatteerReis(reis) + "```");
+    planReis(multiReis(route)).then(async (reis) => {
+        const messages = formatteerReis(reis).split("\n").reduce((resultaatregels, line) => {
+            const lengte = resultaatregels.at(-1).reduce((a, b) => a.length + b.length + 1, 0);
+            if (lengte + line.length >= 1990) {
+                return [...resultaatregels, [line]];
+            } else {
+                return [...resultaatregels.slice(0, -1), [...resultaatregels.at(-1), line]];
+            }
+        })
+        .map((regels) => regels.join("\n"));
+
+        for (const message of messages) {
+            await msg.channel.send("```" + message + "```");
+        }
+
+        
     // }).catch(console.error);
     }).catch((_) => msg.react("😕"));
 });
