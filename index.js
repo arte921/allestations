@@ -26,8 +26,9 @@ client.on("ready", async () => {
 client.on("messageCreate", async msg => {
     if (msg.author.bot) return;
     const route = msg.content;
-    planReis(multiReis(route)).then(async (reis) => {
-        const response = formatteerReis(reis);
+    try {
+        const response = formatteerReis(await planReis(multiReis(route)));
+
         if (response.length < 1990) {
             await msg.channel.send("```" + response + "```");
         } else {
@@ -38,7 +39,9 @@ client.on("messageCreate", async msg => {
                 }]
             });
         }
-    }).catch((_) => msg.react("😕"));
+    } catch (e) {
+        msg.react("😕");
+    }
 });
 
 client.login(process.env.DISCORD_API);
