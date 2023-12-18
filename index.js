@@ -23,23 +23,33 @@ client.on("ready", async () => {
     console.log(`Ingelogd als ${client.user.tag}`);
 });
 
-client.on("messageCreate", async msg => {
-    if (msg.author.bot) return;
-    const route = msg.content;
+const send = async (channel, message) => {
     try {
-        const response = formatteerReis(await planReis(multiReis(route)));
-
-        if (response.length < 1990) {
-            await msg.channel.send("```" + response + "```");
+        if (message.length < 1990) {
+            await channel.send("```" + message + "```");
         } else {
-            await msg.channel.send({
+            await channel.send({
                 files: [{
-                    attachment: Buffer.from(response, "utf-8"),
+                    attachment: Buffer.from(message, "utf-8"),
                     name: 'trein.txt'
                 }]
             });
         }
+    } catch(e) {
+        console.error(`tried to send ${message}`);
+        console.error(e);
+    }
+};
+
+client.on("messageCreate", async msg => {
+    if (msg.author.bot) return;
+    const route = msg.content;
+    try {
+        const reis = formatteerReis(await planReis(multiReis(route)));
+        await send(msg.channel, reis);
     } catch (e) {
+        console.log(e);
+        await send(msg.channel, e);
         msg.react("😕");
     }
 });
