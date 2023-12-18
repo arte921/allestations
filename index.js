@@ -4,7 +4,7 @@ import multiplanner from "multiplanner";
 const {
     multiReis,
     planReis,
-    formatteerReis  
+    formatteerReis
 } = await multiplanner(process.env.NS_API);
 
 
@@ -27,20 +27,6 @@ client.on("messageCreate", async msg => {
     if (msg.author.bot) return;
     const route = msg.content;
     planReis(multiReis(route)).then(async (reis) => {
-        // const messages = formatteerReis(reis).split("\n").reduce((resultaatregels, line) => {
-        //     const lengte = resultaatregels.at(-1).reduce((a, b) => a.length + b.length + 1, 0);
-        //     if (lengte + line.length >= 1990) {
-        //         return [...resultaatregels, [line]];
-        //     } else {
-        //         return [...resultaatregels.slice(0, -1), [...resultaatregels.at(-1), line]];
-        //     }
-        // }, [[]])
-        // .map((regels) => regels.join("\n"));
-
-        // for (const message of messages) {
-        //     await msg.channel.send("```" + message + "```");
-        // }
-
         const response = formatteerReis(reis);
         if (response.length < 1990) {
             await msg.channel.send("```" + response + "```");
@@ -49,12 +35,10 @@ client.on("messageCreate", async msg => {
                 files: [{
                     attachment: Buffer.from(response, "utf-8"),
                     name: 'trein.txt'
-                  }]
-                });
-            }
-        
-    }).catch(console.error);
-    // }).catch((_) => msg.react("😕"));
+                }]
+            });
+        }
+    }).catch((_) => msg.react("😕"));
 });
 
 client.login(process.env.DISCORD_API);
